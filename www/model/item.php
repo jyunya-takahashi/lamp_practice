@@ -5,6 +5,8 @@ require_once MODEL_PATH . 'db.php';
 // DB利用
 
 function get_item($db, $item_id){
+  // execute時に使用する変数を格納
+  $params = array('item_id'=>$item_id);
   $sql = "
     SELECT
       item_id, 
@@ -16,10 +18,10 @@ function get_item($db, $item_id){
     FROM
       items
     WHERE
-      item_id = {$item_id}
+      item_id = :item_id
   ";
 
-  return fetch_query($db, $sql);
+  return fetch_query($db, $sql, $params);
 }
 
 function get_items($db, $is_open = false){
@@ -73,6 +75,8 @@ function regist_item_transaction($db, $name, $price, $stock, $status, $image, $f
 
 function insert_item($db, $name, $price, $stock, $filename, $status){
   $status_value = PERMITTED_ITEM_STATUSES[$status];
+  // execute時に使用する変数を格納
+  $params = array('name'=>$name, 'price'=>$price, 'stock'=>$stock, 'filename'=>$filename, 'status_value'=>$status_value);
   $sql = "
     INSERT INTO
       items(
@@ -82,38 +86,42 @@ function insert_item($db, $name, $price, $stock, $filename, $status){
         image,
         status
       )
-    VALUES('{$name}', {$price}, {$stock}, '{$filename}', {$status_value});
+    VALUES(':name', :price, :stock, ':filename', :status_value);
   ";
 
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, $params);
 }
 
 function update_item_status($db, $item_id, $status){
+  // execute時に使用する変数を格納
+  $params = array('item_id'=>$item_id, 'status'=>$status);
   $sql = "
     UPDATE
       items
     SET
-      status = {$status}
+      status = :status
     WHERE
-      item_id = {$item_id}
+      item_id = :item_id
     LIMIT 1
   ";
   
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, $params);
 }
 
 function update_item_stock($db, $item_id, $stock){
+  // execute時に使用する変数を格納
+  $params = array('item_id'=>$item_id, 'stock'=>$stock);
   $sql = "
     UPDATE
       items
     SET
-      stock = {$stock}
+      stock = :stock
     WHERE
-      item_id = {$item_id}
+      item_id = :item_id
     LIMIT 1
   ";
   
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, $params);
 }
 
 function destroy_item($db, $item_id){
@@ -132,15 +140,17 @@ function destroy_item($db, $item_id){
 }
 
 function delete_item($db, $item_id){
+  // execute時に使用する変数を格納
+  $params = array('item_id'=>$item_id);
   $sql = "
     DELETE FROM
       items
     WHERE
-      item_id = {$item_id}
+      item_id = :item_id
     LIMIT 1
   ";
   
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, $params);
 }
 
 

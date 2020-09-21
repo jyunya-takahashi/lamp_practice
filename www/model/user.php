@@ -3,6 +3,8 @@ require_once MODEL_PATH . 'functions.php';
 require_once MODEL_PATH . 'db.php';
 
 function get_user($db, $user_id){
+  // execute時に使用する変数を格納
+  $params = array('user_id'=>$user_id);
   $sql = "
     SELECT
       user_id, 
@@ -12,14 +14,16 @@ function get_user($db, $user_id){
     FROM
       users
     WHERE
-      user_id = {$user_id}
+      user_id = :user_id
     LIMIT 1
   ";
 
-  return fetch_query($db, $sql);
+  return fetch_query($db, $sql, $params);
 }
 
 function get_user_by_name($db, $name){
+  // execute時に使用する変数を格納
+  $params = array('name'=>$name);
   $sql = "
     SELECT
       user_id, 
@@ -29,11 +33,11 @@ function get_user_by_name($db, $name){
     FROM
       users
     WHERE
-      name = '{$name}'
+      name = :name
     LIMIT 1
   ";
 
-  return fetch_query($db, $sql);
+  return fetch_query($db, $sql, $params);
 }
 
 function login_as($db, $name, $password){
@@ -101,12 +105,14 @@ function is_valid_password($password, $password_confirmation){
 }
 
 function insert_user($db, $name, $password){
+  // execute時に使用する変数を格納
+  $params = array('name'=>$name, 'password'=>$password);
   $sql = "
     INSERT INTO
       users(name, password)
-    VALUES ('{$name}', '{$password}');
+    VALUES (:name, :password);
   ";
 
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, $params);
 }
 
