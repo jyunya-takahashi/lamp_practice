@@ -28,6 +28,8 @@
                 <?php print h(number_format($item['price'])); ?>円
                 <?php if($item['stock'] > 0){ ?>
                   <form action="index_add_cart.php" method="post">
+                    <!-- トークン埋め込み -->
+                    <input type="hidden" name="token" value="<?=$token?>">
                     <input type="submit" value="カートに追加" class="btn btn-primary btn-block">
                     <input type="hidden" name="item_id" value="<?php print($item['item_id']); ?>">
                   </form>

@@ -19,14 +19,19 @@ if(is_admin($user) === false){
 }
 
 $item_id = get_post('item_id');
+// postされたtokenの取得
+$token = get_post('token');
 
-
-if(destroy_item($db, $item_id) === true){
-  set_message('商品を削除しました。');
+// tokenのチェックを実施
+if(is_valid_csrf_token($token) === true) {
+  if(destroy_item($db, $item_id) === true){
+    set_message('商品を削除しました。');
+  } else {
+    set_error('商品削除に失敗しました。');
+  }
 } else {
-  set_error('商品削除に失敗しました。');
+  set_error('不正なアクセスです。');
 }
-
 
 
 redirect_to(ADMIN_URL);
