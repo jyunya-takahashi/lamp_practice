@@ -124,6 +124,38 @@ function update_item_stock($db, $item_id, $stock){
   return execute_query($db, $sql, $params);
 }
 
+// 商品履歴追加orderテーブル
+function purchase_insert_orders($db, $carts, $log){
+  $params = array('order_date'=>$log, 'user_id'=>$carts[0]['user_id']);
+  $sql = "
+    INSERT INTO
+      orders(
+        order_date,
+        user_id
+      )
+    VALUES(:order_date, :user_id);
+  ";
+  
+  return execute_query($db, $sql, $params);
+}
+
+// 商品履歴追加order_detailテーブル
+function purchase_insert_order_detail($db, $order_id, $item_id, $amount, $price){
+  $params = array('order_id'=>$order_id, 'item_id'=>$item_id, 'quantity'=>$amount, 'order_price'=>$price);
+  $sql = "
+    INSERT INTO
+      order_details(
+        order_id,
+        item_id,
+        quantity,
+        order_price
+      )
+    VALUES(:order_id, :item_id, :quantity, :order_price);
+  ";
+  return execute_query($db, $sql, $params);
+}
+
+
 function destroy_item($db, $item_id){
   $item = get_item($db, $item_id);
   if($item === false){
