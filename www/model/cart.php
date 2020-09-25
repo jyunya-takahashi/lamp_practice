@@ -112,20 +112,65 @@ function delete_cart($db, $cart_id){
 }
 
 function purchase_carts($db, $carts){
+  // カート内の商品チェック
   if(validate_cart_purchase($carts) === false){
     return false;
   }
-  foreach($carts as $cart){
-    if(update_item_stock(
-        $db, 
-        $cart['item_id'], 
-        $cart['stock'] - $cart['amount']
-      ) === false){
-      set_error($cart['name'] . 'の購入に失敗しました。');
-    }
-  }
+  // 処理日時の取得
+  $log = date('Y-m-d H:i:s');
   
-  delete_user_carts($db, $carts[0]['user_id']);
+  // トランザクション開始
+  $db->beginTransaction();
+  try {
+    // カートの商品分繰り返し処理
+    foreach($carts as $cart){
+      // ストック数の変更
+      if(update_item_stock(
+            $db, 
+            $cart['item_id'], 
+            $cart['stock'] - $cart['amount']
+        ) === false){
+        set_error($cart['name'] . 'の購入に失敗しました。');
+      }
+    }
+
+    // ordersテーブル登録
+    if(purchase_insert_orders($db, $carts, $log) === false) {
+      set_error('購入に失敗しました。');
+    }
+
+    // 直前に登録したorder_idの取得
+    $order_id = $db->lastinsertid();
+
+    // order_detail_idテーブル登録
+    // カートの商品分繰り返し処理
+    foreach($carts as $cart){
+      if(purchase_insert_order_detail(
+        $db,
+        $order_id,
+        $cart['item_id'], 
+        $cart['amount'],
+        $cart['price']
+      ) === false){
+        set_error($cart['name'] . 'の購入に失敗しました。');
+      }
+    }
+
+    // カート内削除処理
+    delete_user_carts($db, $carts[0]['user_id']);
+    
+    // エラーが存在したか確認
+    if(empty(get_errors()) === true){
+      // エラーなしの場合コミット処理
+      $db->commit();
+    }else{
+      // エラーの場合ロールバック処理
+      $db->rollback();
+      set_error('購入に失敗しました。');
+    }
+
+  } catch (PDOException $e) {
+  }
 }
 
 function delete_user_carts($db, $user_id){
@@ -168,4 +213,3 @@ function validate_cart_purchase($carts){
   }
   return true;
 }
-
