@@ -22,10 +22,10 @@
         </thead>
         <tbody>
           <tr>
-            <td><?php print h($order_detail_top[0]['order_id']); ?></td>
-            <td><?php print h($order_detail_top[0]['order_date']); ?></td>
+            <td><?php print h($order_detail_top['order_id']); ?></td>
+            <td><?php print h($order_detail_top['order_date']); ?></td>
             <!-- 3桁のカンマ区切り -->
-            <td><?php print h(number_format($order_detail_top[0]['total_price'])); ?>円</td>
+            <td><?php print h(number_format($order_detail_top['total_price'])); ?>円</td>
           </tr>
         </tbody>
       </table>
