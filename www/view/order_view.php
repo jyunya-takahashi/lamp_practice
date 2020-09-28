@@ -35,8 +35,6 @@
                 <input type="hidden" name="token" value="<?=$token?>">
                 <input type="submit" value="詳細" class="btn btn-info detail">
                 <input type="hidden" name="order_id" value="<?php print($order['order_id']); ?>">
-                <input type="hidden" name="order_date" value="<?php print($order['order_date']); ?>">
-                <input type="hidden" name="total_price" value="<?php print($order['total_price']); ?>">
               </form>
             </td>
           </tr>
