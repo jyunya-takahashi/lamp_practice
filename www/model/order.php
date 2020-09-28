@@ -59,7 +59,7 @@ function get_order_detail_top($db, $order_id){
     GROUP BY
       orders.order_id;
   ";
-  return fetch_all_query($db, $sql, $params);
+  return fetch_query($db, $sql, $params);
 }
 
 
