@@ -15,6 +15,9 @@ $user = get_login_user($db);
 
 $items = get_open_items($db);
 
+// 購入数上位3位まで取得
+$rankings = get_ranking($db);
+
 // トークンの生成
 $token = get_csrf_token();
 

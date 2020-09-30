@@ -86,7 +86,7 @@ function insert_item($db, $name, $price, $stock, $filename, $status){
         image,
         status
       )
-    VALUES(':name', :price, :stock, ':filename', :status_value);
+    VALUES(:name, :price, :stock, :filename, :status_value);
   ";
 
   return execute_query($db, $sql, $params);
@@ -185,6 +185,29 @@ function delete_item($db, $item_id){
   return execute_query($db, $sql, $params);
 }
 
+
+function get_ranking($db){
+  $sql = '
+  SELECT
+    name,
+    stock,
+    price,
+    image,
+    status,
+    sum(quantity) as total_quantity
+  FROM
+    items
+    LEFT JOIN order_details
+    ON items.item_id = order_details.item_id
+  GROUP BY
+    items.item_id
+  ORDER BY
+    total_quantity DESC
+  LIMIT 3;
+';
+
+  return fetch_all_query($db, $sql);
+}
 
 // 非DB
 
