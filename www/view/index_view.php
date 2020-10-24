@@ -2,17 +2,25 @@
 <html lang="ja">
 <head>
   <?php include VIEW_PATH . 'templates/head.php'; ?>
-  
   <title>商品一覧</title>
   <link rel="stylesheet" href="<?php print(STYLESHEET_PATH . 'index.css'); ?>">
 </head>
 <body>
   <?php include VIEW_PATH . 'templates/header_logined.php'; ?>
-  
 
   <div class="container">
     <h1>商品一覧</h1>
     <?php include VIEW_PATH . 'templates/messages.php'; ?>
+    <!-- 商品並べ替え -->
+    <form id="submit_form" action="index.php" method="GET" class="justify-content-end form-inline">
+      <div class="form-group">
+          <select id="submit_select" class="form-control" name ="sort">
+            <option value="created_desc" <?php if($sort === 'created_desc') { print 'selected'; } ?>>新着順</option>
+            <option value="price_asc" <?php if($sort === 'price_asc') { print 'selected'; } ?>>価格の安い順</option>
+            <option value="price_desc" <?php if($sort === 'price_desc') { print 'selected'; } ?>>価格の高い順</option>
+          </select>
+      </div>
+    </form>
 
     <div class="card-deck">
       <div class="row">
@@ -67,6 +75,7 @@
       </div>
     </div>
   </div>
-  
+  <!-- js読み込み -->
+  <script type="text/javascript" src="assets/js/index.js"></script>
 </body>
 </html>
