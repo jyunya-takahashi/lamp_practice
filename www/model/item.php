@@ -209,6 +209,47 @@ function get_ranking($db){
   return fetch_all_query($db, $sql);
 }
 
+function get_sort_items($db, $sort, $is_open = false){
+  $sql = '
+    SELECT
+      item_id,
+      name,
+      stock,
+      price,
+      image,
+      status
+    FROM
+      items
+  ';
+  if($is_open === true){
+    $sql .= '
+      WHERE status = 1
+    ';
+  }
+  $sql .= '
+      ORDER BY
+    ';
+  if($sort === 'created_desc'){
+    $sql .= '
+      created DESC
+    ';
+  }elseif($sort === 'price_desc'){
+    $sql .= '
+      price DESC
+    ';
+  }elseif($sort === 'price_asc'){
+    $sql .= '
+      price ASC
+    ';
+  }
+
+  return fetch_all_query($db, $sql);
+}
+
+function get_sort_open_items($db, $sort){
+  return get_sort_items($db, $sort, true);
+}
+
 // 非DB
 
 function is_open($item){

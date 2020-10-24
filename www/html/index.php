@@ -13,12 +13,23 @@ if(is_logined() === false){
 $db = get_db_connect();
 $user = get_login_user($db);
 
-$items = get_open_items($db);
 
-// 購入数上位3位まで取得
-$rankings = get_ranking($db);
 
 // トークンの生成
 $token = get_csrf_token();
 
+// 購入数ランキングを取得
+$rankings = get_ranking($db);
+
+// 並べ替え機能
+if(isset($_GET['sort'])){
+  $sort = get_get("sort");
+  $items = get_sort_open_items($db, $sort);
+} else {
+  $sort = 'created_desc';
+  $items = get_sort_open_items($db, $sort);
+}
+
 include_once VIEW_PATH . 'index_view.php';
+
+?>
