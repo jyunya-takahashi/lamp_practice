@@ -51,6 +51,33 @@
       <?php } ?>
       </div>
     </div>
+    
+    <!-- ページネーション -->
+    <div class="mt-4" id='pagenation'>
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          <?php if($page !== 1){ ?>
+          <li class="page-item">
+            <a class="page-link" href="?page=<?php echo $page - 1 ?>&sort=<?php echo $sort ?>" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <?php } ?>
+          <?php for ($x=1; $x <= $pagenation ; $x++) { ?>
+          <li class="page-item <?php if($x === $page){print"active";}?>"><a class="page-link" href="?page=<?php echo $x ?>&sort=<?php echo $sort ?>"><?php echo $x; ?></a></li>
+          <?php } ?>
+          <?php if($page < $pagenation){ ?>
+          <li class="page-item">
+            <a class="page-link" href="?page=<?php echo $page + 1 ?>&sort=<?php echo $sort ?>" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          <?php } ?>
+        </ul>
+        <p class="text-center">全 <?php print $all_item_num; ?> 件中 <?php print $start + 1; ?> - <?php print $start + count($items); ?> 件目の商品を表示中</p>
+      </nav>
+    </div>
+
     <!-- ランキング -->
     <h2>ランキング</h2>
     <div class="card-deck">
